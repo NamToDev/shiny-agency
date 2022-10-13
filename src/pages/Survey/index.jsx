@@ -1,5 +1,4 @@
-import { Route, Link, useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 
 function Survey() {
   const { questionNumber } = useParams();
