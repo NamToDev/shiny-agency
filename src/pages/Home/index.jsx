@@ -2,28 +2,33 @@ import colors from '../../utils/style/colors';
 import illustration from '../../assets/home-illustration.svg';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useTheme } from '../../utils/hooks';
 
 const StyledHome = styled.div`
   margin-top: 130px;
   margin-left: 60px;
   margin-right: 60px;
   height: 600px;
-  background-color: ${colors.backgroundLight};
+  background-color: ${({ theme }) =>
+    theme === 'light'
+      ? `${colors.backgroundLight}`
+      : `${colors.backgroundDark}`};
   display: flex;
   justify-content: space-around;
   align-items: center;
+  border-radius: 3px;
 `;
 
 const StyledLink = styled(Link)`
-  padding: 10px;
-  padding-left: 20px;
-  padding-right: 20px;
-  color: #8186a0;
+  padding: 10px 15px;
   text-decoration: none;
-  font-size: 15px;
+  font-size: 18px;
+  text-align: center;
   ${(props) =>
     props.$isFullLink &&
-    `color:white; border-radius: 30px; background-color: ${colors.primary};`}
+    `color: white; 
+  border-radius: 30px; 
+  background-color: ${colors.primary};`}
 `;
 
 const StyledContainer = styled.div`
@@ -32,6 +37,10 @@ const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   ${(props) => props.$isDescription && `margin-top: 120px;`}
+  background-color: ${({ theme }) =>
+    theme === 'light'
+      ? `${colors.backgroundLight}`
+      : `${colors.backgroundDark}`};
 `;
 
 const StyledImage = styled.img`
@@ -40,9 +49,11 @@ const StyledImage = styled.img`
 `;
 
 function Home() {
+  const { theme } = useTheme();
+
   return (
-    <StyledHome className="App">
-      <StyledContainer $isDescription>
+    <StyledHome className="App" theme={theme}>
+      <StyledContainer $isDescription theme={theme}>
         <h1>
           Réperez vos besoins,
           <br />
@@ -56,7 +67,7 @@ function Home() {
           Faire le test
         </StyledLink>
       </StyledContainer>
-      <StyledContainer>
+      <StyledContainer theme={theme}>
         <StyledImage src={illustration} alt="Illustration" />
       </StyledContainer>
     </StyledHome>

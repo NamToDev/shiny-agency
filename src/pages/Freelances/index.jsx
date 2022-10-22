@@ -1,14 +1,14 @@
-import DefaultPicture from '../../assets/profile.png';
 import Card from '../../components/Card';
 import styled from 'styled-components';
 import { Loader } from '../../utils/Atoms';
-import { useState, useEffect } from 'react';
+import { useFecth, useTheme } from '../../utils/hooks';
 
 const FreelanceContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+  color: ${({ theme }) => (theme === 'light' ? `black` : `white`)};
 `;
 
 const CardsContainer = styled.div`
@@ -21,35 +21,24 @@ const CardsContainer = styled.div`
 `;
 
 function Freelances() {
-  const [freelancersProfile, setFreelancersProfile] = useState([]);
-  const [isDataLoading, setIsDataLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { theme } = useTheme();
+  const { data, isLoading, error } = useFecth(
+    `http://localhost:8000/freelances`
+  );
 
-  useEffect(() => {
-    async function fetchFreelancersProfil() {
-      setIsDataLoading(true);
-      try {
-        const response = await fetch(`http://localhost:8000/freelances`);
-        const { freelancersList } = await response.json();
-        setFreelancersProfile(freelancersList);
-      } catch (err) {
-        setError(err);
-        console.log(error);
-      } finally {
-        setIsDataLoading(false);
-      }
-    }
+  const freelancersProfile = data.freelancersList;
 
-    fetchFreelancersProfil();
-  }, []);
+  if (error) {
+    return <span>Il y a un probleme !</span>;
+  }
 
   return (
-    <FreelanceContainer>
+    <FreelanceContainer theme={theme}>
       <h1>Trouvez votre prestataire</h1>
       <p style={{ color: '#8186A0' }}>
         Chez Shiny nous réunissons les meilleurs profils pour vous.
       </p>
-      {isDataLoading ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <CardsContainer>
